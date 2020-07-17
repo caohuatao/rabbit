@@ -1,0 +1,79 @@
+<!--
+ * User: CHT
+ * Date: 2020/7/17
+ * Time: 15:17
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+
+<button id="button1">添加人员</button>
+<button id="button2">获取人员</button>
+<script>
+  const rabbitDB = indexedDB.open('RabbitDb', 1)
+
+  let db
+
+  rabbitDB.onerror = err => {
+    console.log('连接数据库失败')
+  }
+  rabbitDB.onupgradeneeded = evt => {
+    console.log('onupgradeneeded')
+    db = evt.target.result
+    const Person = db.createObjectStore(
+      'person',
+      {autoIncrement: true}
+    )
+    Person.createIndex('name', 'name', { unique: false });
+    Person.createIndex('email', 'email', { unique: true });
+  }
+  rabbitDB.onsuccess = evt => {
+    db = rabbitDB.result
+  }
+
+  function addPerson(val) {
+    const request = db.transaction(['person'], 'readwrite')
+      .objectStore('person')
+      .add(val)
+
+    request.onsuccess = function (event) {
+      console.log('数据写入成功')
+    }
+
+    request.onerror = function (event) {
+      console.log('数据写入失败')
+    }
+  }
+
+  function read() {
+    const transaction = db.transaction(['person']);
+    const objectStore = transaction.objectStore('person');
+    const request = objectStore.get(1);
+
+    request.onerror = function(event) {
+      console.log('事务失败');
+    };
+
+    request.onsuccess = function( event) {
+      if (request.result) {
+        console.log(request)
+      } else {
+        console.log('未获得数据记录');
+      }
+    };
+  }
+
+  document.getElementById('button1').onclick = function () {
+    addPerson({name: '张三', age: 24, email: 'zhangsan@example.com'})
+  }
+
+  document.getElementById('button2').onclick = function () {
+    read()
+  }
+</script>
+</body>
+</html>

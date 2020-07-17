@@ -9,7 +9,7 @@ import ElementUI from 'element-ui'
 import i18n from '../../i18n'
 import router from './router'
 import store from './store'
-import rabbitDB from '@/indexdDB/index'
+import rabbitDB from '@/DB'
 
 import '../../style/index.less'
 

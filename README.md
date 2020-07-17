@@ -1,19 +1,12 @@
 # rabbit
 
-## Project setup
-```
-yarn install
-```
+## Todo list
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
-
-### Compiles and minifies for production
-```
-yarn build
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+- [ ] Main process
+- [ ] Render process
+- [ ] Task list
+- [ ] New task
+- [ ] IndexedDB
+- [ ] Terminal
+- [ ] Function list
+- [ ] Create function

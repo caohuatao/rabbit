@@ -4,24 +4,10 @@
  * Time: 15:00
 -->
 <template>
-  <el-container class="rabbit__index-page">
-    <el-header>
+  <el-container class="page-container rabbit__index-page">
+    <el-header height="40px">
       <h3>Rabbit</h3>
       <el-button-group>
-        <el-button
-          v-if="$route.name === 'Index'"
-          @click="setting"
-          class="setting-btn"
-          type="text"
-          icon="el-icon-setting">
-        </el-button>
-        <el-button
-          v-else
-          @click="back"
-          class="setting-btn"
-          type="text"
-          icon="el-icon-arrow-left">
-        </el-button>
         <el-button
           @click="minus"
           type="text"
@@ -35,22 +21,34 @@
       </el-button-group>
     </el-header>
     <el-main>
-      <router-view></router-view>
     </el-main>
+    <el-footer height="30px">
+      <el-button
+        class="setting-btn"
+        type="text"
+        icon="el-icon-edit">
+      </el-button>
+      <el-button
+        @click="setting"
+        class="setting-btn"
+        type="text"
+        icon="el-icon-setting">
+      </el-button>
+    </el-footer>
   </el-container>
 </template>
 
 <script>
+
+  const {ipcRenderer} = window.require('electron')
+
   export default {
     methods: {
       setting() {
-        this.$router.push('/setting')
-      },
-      back() {
-        this.$router.push('/')
+        console.log('setting')
       },
       minus() {
-        console.log('minus')
+        ipcRenderer.send('open-terminal')
       },
       close() {
         console.log('close')
@@ -60,18 +58,12 @@
 </script>
 
 <style lang="less">
-  html,
-  body {
-    height : 100%;
-  }
+
 
   .rabbit__index-page {
-    background : var(--backgroud-color-black) url(/image/starry-sky.svg) no-repeat center/auto 100%;
-    height     : 100%;
-    overflow   : hidden;
+    @color : var(--header-font-color);
 
     > .el-header {
-      @color              : var(--header-font-color);
 
       -webkit-user-select : none;
       -webkit-app-region  : drag;
@@ -89,10 +81,6 @@
         -webkit-app-region : no-drag;
 
         > .el-button {
-          &.setting-btn {
-            font-size : 16px;
-          }
-
           color        : @color;
           font-size    : 18px;
           padding-left : 12px;
@@ -103,7 +91,20 @@
 
     > .el-main {
       /*background-color: #000000;*/
+    }
 
+    > .el-footer {
+      display          : flex;
+      align-items      : center;
+      justify-content  : flex-end;
+      background-color : rgba(0, 0, 0, 0.3);
+      box-shadow       : 0 -5px 120px rgba(68, 185, 68, 0.3);
+
+      .el-button {
+        color        : @color;
+        font-size    : 16px;
+        padding-left : 0;
+      }
     }
   }
 </style>

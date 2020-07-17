@@ -19,6 +19,11 @@ module.exports = {
       entry: 'src/pages/home/home.js',
       template: 'public/index.html',
       filename: 'home.html'
+    },
+    terminal: {
+      entry: 'src/pages/terminal/terminal.js',
+      template: 'public/index.html',
+      filename: 'terminal.html'
     }
   },
   chainWebpack: config => {

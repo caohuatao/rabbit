@@ -1,55 +1,105 @@
 'use strict'
 
-import {app, protocol, BrowserWindow} from 'electron'
-import {createProtocol} from 'vue-cli-plugin-electron-builder/lib'
-import installExtension, {VUEJS_DEVTOOLS} from 'electron-devtools-installer'
+import {
+  app,
+  protocol,
+  BrowserWindow,
+  ipcMain
+} from 'electron'
 
+import {
+  createProtocol
+} from 'vue-cli-plugin-electron-builder/lib'
+
+import installExtension, {
+  VUEJS_DEVTOOLS
+} from 'electron-devtools-installer'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-let win
+const windowMap = {
+  main: null,
+  setting: null,
+  home: null,
+  terminalList: []
+}
 
-// Scheme must be registered before the app is ready
-protocol.registerSchemesAsPrivileged([
-  {scheme: 'app', privileges: {secure: true, standard: true}}
-])
-
-function createWindow() {
-  // Create the browser window.
-  win = new BrowserWindow({
+function createWin(html, options = {}) {
+  options = Object.assign({
     width: 320,
-    minWidth: 320,
-    maxWidth: 320,
+    height: 680,
+    center: true,
+    resizable: false,
+    frame: false,
+    webPreferences: {
+      nodeIntegration: true
+    }
+  }, options)
+  
+  const win = new BrowserWindow(options)
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/${html}`).catch(console.error)
+    if (!process.env.IS_TEST) win.webContents.openDevTools()
+  } else {
+    createProtocol('app')
+    console.log(`app://./${html}`)
+    win.loadURL(`app://./${html}`).catch(console.error)
+  }
+  
+  return win
+}
+
+function crateMain() {
+  windowMap.main = createWin('index.html')
+  windowMap.main.on('closed', () => {
+    windowMap.main = null
+    app.quit()
+  })
+}
+
+function crateSetting() {
+
+}
+
+function crateHome() {
+  if(windowMap.home === null) {
+    windowMap.home = createWin('home.html', {
+      width: 1000,
+      height: 800,
+      center: true,
+      resizable: true,
+      frame: false,
+      webPreferences: {
+        nodeIntegration: true
+      }
+    })
+  }
+  windowMap.home.focus()
+}
+
+function crateTerminal() {
+  const win = createWin('terminal.html', {
+    width: 1000,
     height: 800,
-    minHeight: 600,
     center: true,
     resizable: true,
     frame: false,
     webPreferences: {
-      // Use pluginOptions.nodeIntegration, leave this alone
-      // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
       nodeIntegration: true
     }
   })
   
-  if (process.env.WEBPACK_DEV_SERVER_URL) {
-    // Load the url of the dev server if in development mode
-    win.loadURL(process.env.WEBPACK_DEV_SERVER_URL).catch(console.error)
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
-  } else {
-    createProtocol('app')
-    // Load the index.html when not in development
-    win.loadURL('app://./index.html').catch(console.error)
-  }
-  
+  windowMap.terminalList.push(win)
   win.on('closed', () => {
-    win = null
+    const idx = windowMap.terminalList.indexOf(win)
+    windowMap.terminalList.splice(idx, 1)
   })
 }
 
-// Quit when all windows are closed.
+protocol.registerSchemesAsPrivileged([
+  {scheme: 'app', privileges: {secure: true, standard: true}}
+])
+
 app.on('window-all-closed', () => {
   // On macOS it is common for applications and their menu bar
   // to stay active until the user quits explicitly with Cmd + Q
@@ -59,29 +109,22 @@ app.on('window-all-closed', () => {
 })
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (win === null) {
-    createWindow()
+  if (windowMap.main === null) {
+    crateMain()
   }
 })
 
-// This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
 app.on('ready', async () => {
   if (isDevelopment && !process.env.IS_TEST) {
-    // Install Vue Devtools
     try {
       await installExtension(VUEJS_DEVTOOLS)
     } catch (e) {
       console.error('Vue Devtools failed to install:', e.toString())
     }
   }
-  createWindow()
+  crateMain()
 })
 
-// Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
   if (process.platform === 'win32') {
     process.on('message', (data) => {
@@ -95,3 +138,8 @@ if (isDevelopment) {
     })
   }
 }
+
+
+ipcMain.on('open-terminal', (e, arg) => {
+  crateTerminal()
+})

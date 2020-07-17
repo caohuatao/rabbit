@@ -15,16 +15,12 @@
 
 <script>
   // @ is an alias to /src
-  import HelloWorld from '@/components/HelloWorld.vue'
-
   // const {ipcRenderer} = window.require('electron')
   // const shell = window.require('shelljs')
 
   export default {
     name: 'Home',
-    components: {
-      HelloWorld
-    },
+
     data() {
       return {
         langList: [

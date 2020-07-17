@@ -7,13 +7,23 @@
 const rabbitDB = indexedDB.open('RabbitDb', 1)
 
 
-rabbitDB.addEventListener('success', e => {
-  console.log('连接数据库成功')
-})
 
-rabbitDB.addEventListener('error', e => {
+
+
+let db
+
+rabbitDB.onsuccess = evt => {
+  db = rabbitDB.result
+}
+rabbitDB.onerror = err => {
   console.log('连接数据库失败')
-})
+}
+rabbitDB.onupgradeneeded = evt => {
+  db = evt.target.result
+}
+
+
+
 
 
 export default rabbitDB
