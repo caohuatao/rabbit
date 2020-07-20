@@ -2431,9 +2431,9 @@
 .el-select-dropdown {
   position: absolute;
   z-index: 1001;
-  border: 1px solid var(--border-color-light);
+  border: 1px solid var(--background-color-current);
   border-radius: 4px;
-  background-color: #FFF;
+  background-color: var(--background-color-current);
   -webkit-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
   box-shadow: 0 2px 12px 0 rgba(0, 0, 0, .1);
   -webkit-box-sizing: border-box;
@@ -2443,7 +2443,7 @@
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected {
   color: var(--color-primary);
-  background-color: #FFF
+  background-color: var(--background-color-current)
 }
 
 .el-select-dropdown.is-multiple .el-select-dropdown__item.selected.hover {
@@ -2506,7 +2506,7 @@
 }
 
 .el-select-dropdown__item.is-disabled:hover {
-  background-color: #FFF
+  background-color: var(--background-color-current)
 }
 
 .el-select-dropdown__item.hover, .el-select-dropdown__item:hover {
@@ -2514,7 +2514,7 @@
 }
 
 .el-select-dropdown__item.selected {
-  color: var(--color-primary);
+  color: var(--color-warning);
   font-weight: 700
 }
 
@@ -11157,14 +11157,14 @@
   bottom: -6px;
   left: 50%;
   margin-right: 3px;
-  border-top-color: var(--border-color-lighter);
+  border-top-color: var(--background-color-current);
   border-bottom-width: 0
 }
 
 .el-popper[x-placement^=top] .popper__arrow::after {
   bottom: 1px;
   margin-left: -6px;
-  border-top-color: #FFF;
+  border-top-color: var(--background-color-current);
   border-bottom-width: 0
 }
 

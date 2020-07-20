@@ -5,10 +5,25 @@
 -->
 <template>
   <el-container class="page-container rabbit__terminal-page">
-    <el-header height="40px"></el-header>
-    <el-main>
+    <el-header height="40px">
+      <h3>Rabbit Terminal</h3>
+      <el-button-group>
+        <el-button
+          @click="minus"
+          type="text"
+          icon="el-icon-minus">
+        </el-button>
+        <el-button
+          @click="close"
+          type="text"
+          icon="el-icon-close">
+        </el-button>
+      </el-button-group>
+    </el-header>
+    <el-main class="terminal__container">
       <div ref="terminal-container"></div>
     </el-main>
+    <el-footer height="32px"></el-footer>
   </el-container>
 </template>
 
@@ -16,13 +31,24 @@
   import {Terminal} from 'xterm'
   import {FitAddon} from 'xterm-addon-fit'
 
-  const {Client} = window.require('ssh2')
+  const {
+    Client
+  } = window.require('ssh2')
+
+  const {
+    ipcRenderer,
+    remote
+  } = window.require('electron')
+
+  const win = remote.getCurrentWindow()
 
   export default {
     data() {
       return {
         terminal: new Terminal({
           cursorBlink: true,
+          lineHeight: 1.2,
+          allowTransparency: true,
           theme: {
             foreground: 'rgba(199,237,204,255)', //字体
             background: 'rgba(0,0,0,0)', //背景色
@@ -35,7 +61,6 @@
       }
     },
     created() {
-
       window.addEventListener('resize', this.winResize)
       this.$once('hook:beforeDestroy', () => {
         this.stream.write('exit \n')
@@ -48,23 +73,30 @@
       this.terminal.focus()
       this.fitAdd.fit()
       this.terminal.onData(this.terminalOnData)
-
       this.linkSSH()
       this.coon.on('ready', this.sshReady)
     },
     methods: {
+      minus() {
+        win.minimize()
+      },
+      close() {
+        this.stream.write('exit \n')
+        win.close()
+      },
+
       linkSSH() {
         this.coon.connect({
-          host: '192.168.2.30',
+          host: '141.164.57.205',
           port: '22',
           username: 'root',
-          password: '123456'
+          password: '+uV1cvx?*ya%(Qdg'
         })
       },
       sshReady() {
         this.coon.shell({
           term: 'xterm-color',
-          cols: 210,
+          cols: 300,
           rows: 55
         }, this.sshShell)
       },
@@ -75,16 +107,11 @@
           this.stream = stream
           stream.on('data', this.terminalWrite)
         }
-        this.coon.exec('ll', {}, (err, stream) => {
-          console.log(stream)
-        })
       },
-
       winResize() {
         this.fitAdd.fit()
       },
       terminalWrite(data) {
-        console.log(data.toString())
         this.terminal.write(data.toString())
       },
       terminalOnData(data) {
@@ -98,21 +125,54 @@
 
 <style lang="less">
   .rabbit__terminal-page {
-    height : 100%;
-    width  : 100%;
+    opacity : 0.9;
 
     > .el-header {
-      -webkit-user-select : none;
-      -webkit-app-region  : drag;
+
     }
 
-    > .el-main {
-      padding : 0;
-      height  : calc(100% - 40px);
+    > .el-main.terminal__container {
+      padding          : 0 0 0 16px;
+      overflow         : hidden;
+      background-color : rgba(25, 35, 48, 0.8);
 
       > div {
-        height : 100%;
+
+        height          : 100%;
+        overflow        : hidden;
+        display         : flex;
+        flex-direction  : column;
+        justify-content : center;
+
+        .xterm-helper-textarea {
+          margin-top : -35px;
+        }
+
+        .xterm .xterm-viewport {
+
+          &::-webkit-scrollbar,
+          &::-webkit-scrollbar-track {
+            width            : 16px;
+            background-color : #1d2636
+          }
+
+          &::-webkit-scrollbar-thumb {
+            background-color : #304057;
+            border-radius    : 5px;
+            border           : 2px solid #1d2636
+          }
+
+          &::-webkit-scrollbar-corner {
+            background-color : #1d2636
+          }
+        }
       }
+
+
+    }
+
+    > .el-footer {
+      height : 32px;
     }
   }
 </style>

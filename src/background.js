@@ -2,9 +2,9 @@
 
 import {
   app,
+  ipcMain,
   protocol,
   BrowserWindow,
-  ipcMain
 } from 'electron'
 
 import {
@@ -31,6 +31,8 @@ function createWin(html, options = {}) {
     center: true,
     resizable: false,
     frame: false,
+    transparent: true,
+    show: false,
     webPreferences: {
       nodeIntegration: true
     }
@@ -38,49 +40,53 @@ function createWin(html, options = {}) {
   
   const win = new BrowserWindow(options)
   if (process.env.WEBPACK_DEV_SERVER_URL) {
-    win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}/${html}`).catch(console.error)
+    win.loadURL(`${process.env.WEBPACK_DEV_SERVER_URL}${html}`).catch(console.error)
     if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol('app')
-    console.log(`app://./${html}`)
     win.loadURL(`app://./${html}`).catch(console.error)
   }
-  
+  win.once('ready-to-show', () => {
+    win.show()
+  })
   return win
 }
 
 function crateMain() {
-  windowMap.main = createWin('index.html')
-  windowMap.main.on('closed', () => {
-    windowMap.main = null
-    app.quit()
-  })
+  if(windowMap.main === null) {
+    windowMap.main = createWin('index.html', {
+      fullscreen: false
+    })
+    windowMap.main.on('closed', () => {
+      windowMap.main = null
+      app.quit()
+    })
+  } else {
+    windowMap.main.focus()
+  }
 }
 
-function crateSetting() {
-
-}
-
-function crateHome() {
-  if(windowMap.home === null) {
-    windowMap.home = createWin('home.html', {
+function crateHome(params) {
+  if (windowMap.home === null) {
+    windowMap.home = createWin(`home.html${params}`, {
       width: 1000,
       height: 800,
-      center: true,
-      resizable: true,
-      frame: false,
-      webPreferences: {
-        nodeIntegration: true
-      }
+      minWidth: 1000,
+      minHeight: 800,
+      resizable: true
     })
+    windowMap.home.on('closed', () => windowMap.home = null)
+  } else {
+    windowMap.home.focus()
   }
-  windowMap.home.focus()
 }
 
 function crateTerminal() {
   const win = createWin('terminal.html', {
     width: 1000,
     height: 800,
+    minWidth: 800,
+    minHeight: 600,
     center: true,
     resizable: true,
     frame: false,
@@ -88,7 +94,6 @@ function crateTerminal() {
       nodeIntegration: true
     }
   })
-  
   windowMap.terminalList.push(win)
   win.on('closed', () => {
     const idx = windowMap.terminalList.indexOf(win)
@@ -101,8 +106,6 @@ protocol.registerSchemesAsPrivileged([
 ])
 
 app.on('window-all-closed', () => {
-  // On macOS it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
   if (process.platform !== 'darwin') {
     app.quit()
   }
@@ -139,7 +142,13 @@ if (isDevelopment) {
   }
 }
 
-
-ipcMain.on('open-terminal', (e, arg) => {
-  crateTerminal()
+ipcMain.on('router', (e, arg) => {
+  switch (arg.id) {
+    case 'home':
+      return crateHome(arg.params)
+    case 'terminal':
+      return crateTerminal(arg.params)
+    default:
+      return
+  }
 })
