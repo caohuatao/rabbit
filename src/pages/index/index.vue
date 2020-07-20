@@ -133,12 +133,19 @@
           input {
             color : #FFFFFF;
           }
+          .el-input__icon {
+            color : #FFFFFF;
+          }
         }
 
         input {
           background-color : transparent;
           color            : var(--header-font-color);
           border           : none;
+        }
+
+        .el-input__icon {
+          color: var(--header-font-color);
         }
       }
 
