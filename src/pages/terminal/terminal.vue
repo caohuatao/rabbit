@@ -90,7 +90,7 @@
           host: '141.164.57.205',
           port: '22',
           username: 'root',
-          password: '+uV1cvx?*ya%(Qdg'
+          password: ''
         })
       },
       sshReady() {
