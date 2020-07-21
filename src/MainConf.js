@@ -17,6 +17,25 @@ protocol.registerSchemesAsPrivileged([
   {scheme: 'app', privileges: {secure: true, standard: true}}
 ])
 
+
+function registerEmit() {
+  const emitMap = {
+    router: (e, arg) => {
+      switch (arg.id) {
+        case 'home':
+          return this.crateHome(arg.params)
+        case 'terminal':
+          return this.crateTerminal(arg.params)
+        default:
+          return
+      }
+    }
+  }
+  Object.keys(emitMap).forEach(key => {
+    ipcMain.on(key, emitMap[key])
+  })
+}
+
 class MainProcessConf {
   constructor() {
     this.map = {
@@ -25,6 +44,7 @@ class MainProcessConf {
       home: null,
       terminalList: []
     }
+    registerEmit.call(this)
   }
   
   createWin(html, options = {}) {
@@ -79,7 +99,7 @@ class MainProcessConf {
         minHeight: 800,
         resizable: true
       })
-      this.map.home.on('closed', () => windowMap.home = null)
+      this.map.home.on('closed', () => this.map.home = null)
     } else {
       this.map.home.focus()
     }
@@ -104,24 +124,8 @@ class MainProcessConf {
       this.map.terminalList.splice(idx, 1)
     })
   }
-  
-  registerEmit() {
-    const emitMap = {
-      router: (e, arg) => {
-        switch (arg.id) {
-          case 'home':
-            return this.crateHome(arg.params)
-          case 'terminal':
-            return this.crateTerminal(arg.params)
-          default:
-            return
-        }
-      }
-    }
-    Object.keys(emitMap).forEach(key => {
-      ipcMain.on(key, emitMap[key])
-    })
-  }
 }
+
+
 
 export default new MainProcessConf()
