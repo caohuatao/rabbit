@@ -55,7 +55,8 @@ function createWin(html, options = {}) {
 function crateMain() {
   if(windowMap.main === null) {
     windowMap.main = createWin('index.html', {
-      fullscreen: false
+      fullscreenable: false,
+      maximizable: false
     })
     windowMap.main.on('closed', () => {
       windowMap.main = null

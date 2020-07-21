@@ -5,17 +5,11 @@
  */
 import Vue from 'vue'
 import Terminal from './terminal.vue'
-import i18n from '../../i18n'
-import ElementUI from 'element-ui'
+
 import router from './router'
-import rabbitDB from '@/db/index'
+import i18n from '@/plugins'
 
-import '../../style/index.less'
 import 'xterm/css/xterm.css'
-
-Vue.use(ElementUI)
-Vue.config.productionTip = false
-
 
 new Vue({
   i18n,

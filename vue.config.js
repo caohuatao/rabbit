@@ -6,26 +6,20 @@
 
 
 const path = require('path')
+const fs = require('fs')
 const resolve = dir => path.join(__dirname, dir)
+const pages = {}
+const dirList = fs.readdirSync(resolve('src/pages'))
+dirList.forEach(dir => {
+  pages[dir] = {
+    entry: `src/pages/${dir}/${dir}.js`,
+    template: 'public/index.html',
+    filename: `${dir}.html`
+  }
+})
 
 module.exports = {
-  pages: {
-    index: {
-      entry: 'src/pages/index/index.js',
-      template: 'public/index.html',
-      filename: 'index.html'
-    },
-    home: {
-      entry: 'src/pages/home/home.js',
-      template: 'public/index.html',
-      filename: 'home.html'
-    },
-    terminal: {
-      entry: 'src/pages/terminal/terminal.js',
-      template: 'public/index.html',
-      filename: 'terminal.html'
-    }
-  },
+  pages,
   chainWebpack: config => {
     // 添加别名
     config.resolve.alias

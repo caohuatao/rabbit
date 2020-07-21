@@ -23,7 +23,7 @@ body {
     position            : relative;
     z-index             : 2;
     color               : @color;
-    background-color    : var(--background-color-current);
+    background-color    : var(--background-color-base);
     box-shadow          : 0 2px 3px 2px #00000045;
     display             : flex;
     justify-content     : space-between;
@@ -32,8 +32,8 @@ body {
     .el-button {
       -webkit-app-region : no-drag;
       color              : @color;
-      font-size    : 18px;
-      padding-left : 12px;
+      font-size          : 18px;
+      padding-left       : 12px;
 
       &:hover {
         color : var(--header-hover-font-color);
@@ -42,9 +42,12 @@ body {
   }
 
   > .el-main {
-    background : rgba(25, 35, 48, 0.4);
-    position   : relative;
-    z-index    : 1;
+    // box-sizing: border-box;
+    background   : rgba(25, 35, 48, 0.4);
+    position     : relative;
+    z-index      : 1;
+    border-left  : 1px solid var(--background-color-base);
+    border-right : 1px solid var(--background-color-base);
 
     &::-webkit-scrollbar,
     &::-webkit-scrollbar-track {
@@ -64,14 +67,14 @@ body {
   > .el-footer {
     //-webkit-user-select : none;
     //-webkit-app-region  : drag;
-    background-color : var(--background-color-current);
+    background-color : var(--background-color-base);
     position         : relative;
     z-index          : 1;
     box-shadow       : 0 -2px 3px 2px #00000045;
 
-    display             : flex;
-    justify-content     : space-between;
-    align-items         : center;
+    display          : flex;
+    justify-content  : space-between;
+    align-items      : center;
 
     .el-button {
       -webkit-app-region : no-drag;
@@ -83,3 +86,12 @@ body {
     }
   }
 }
+
+.el-select-dropdown {
+  .el-select-dropdown__list {
+    .el-select-dropdown__item.hover {
+      background-color : rgba(0,0,0,0.2);
+    }
+  }
+}
+

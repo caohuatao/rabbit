@@ -16,10 +16,16 @@ import zhLocale from 'element-ui/lib/locale/lang/zh-CN'
 
 Vue.use(VueI18n)
 
-export default new VueI18n({
-  locale: 'zh',
+const i18n = new VueI18n({
+  locale: localStorage.getItem('lang') || 'en',
   messages: {
     en: Object.assign(en, enLocale),
     zh: Object.assign(zh, zhLocale)
   }
 })
+
+window.addEventListener('storage', () => {
+  i18n.locale = localStorage.getItem('lang') || 'en'
+})
+
+export default i18n
