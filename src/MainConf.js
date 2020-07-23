@@ -57,6 +57,7 @@ class MainProcessConf {
       transparent: true,
       show: false,
       webPreferences: {
+        offscreen: true,
         nodeIntegration: true
       }
     }, options)
@@ -113,10 +114,7 @@ class MainProcessConf {
       minHeight: 600,
       center: true,
       resizable: true,
-      frame: false,
-      webPreferences: {
-        nodeIntegration: true
-      }
+      frame: false
     })
     this.map.terminalList.push(win)
     win.on('closed', () => {

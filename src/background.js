@@ -8,6 +8,8 @@ import MainConf from '@/MainConf'
 
 const isDevelopment = process.env.NODE_ENV !== 'production'
 
+app.disableHardwareAcceleration()
+
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit()

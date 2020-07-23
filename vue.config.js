@@ -25,5 +25,34 @@ module.exports = {
     config.resolve.alias
       .set('@', resolve('src'))
       .set('@comp', resolve('src/components'))
+  },
+  pluginOptions: {
+    electronBuilder: {
+      builderOptions: {
+        productName: 'rabbit',
+        copyright: 'Copyright © 2020',
+        win: {
+          icon: 'public/favion.ico',
+          target: [
+            {
+              target: "nsis",
+              arch: [
+                "x64"
+              ]
+            }
+          ]
+        },
+        nsis: {
+          oneClick: false,
+          perMachine: false,
+          allowElevation: true,
+          createDesktopShortcut: true,
+          runAfterFinish: true,
+          installerIcon: 'public/favicon.ico',
+          uninstallerIcon: 'public/favicon.ico',
+          include: 'public/installer.nsh'
+        }
+      }
+    }
   }
 }

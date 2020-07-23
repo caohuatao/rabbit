@@ -9,7 +9,9 @@
     "electron:serve": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
-    "proxy": "npm config set ELECTRON_MIRROR http://npm.taobao.org/mirrors/electron/"
+    "proxy-electron": "npm config set ELECTRON_MIRROR http://npm.taobao.org/mirrors/electron/",
+    "proxy-phantomjs": "npm config set PHANTOMJS_CDNURL=https://npm.taobao.org/mirrors/phantomjs/",
+    "prosy-node-sass": "npm config set  SASS_BINARY_SITE=https://npm.taobao.org/mirrors/node-sass/"
   },
   "main": "background.js",
   "dependencies": {
