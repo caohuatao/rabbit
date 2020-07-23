@@ -57,7 +57,6 @@ class MainProcessConf {
       transparent: true,
       show: false,
       webPreferences: {
-        offscreen: true,
         nodeIntegration: true
       }
     }, options)
