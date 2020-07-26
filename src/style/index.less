@@ -90,8 +90,105 @@ body {
 .el-select-dropdown {
   .el-select-dropdown__list {
     .el-select-dropdown__item.hover {
-      background-color : rgba(0,0,0,0.2);
+      background-color : rgba(0, 0, 0, 0.2);
     }
+  }
+}
+
+
+.el-button {
+  &&--primary {
+    border-color     : rgba(0, 0, 0, 0.2);
+    background-color : rgba(0, 0, 0, 0.6);
+    color            : var(--header-font-color);
+
+    &:hover {
+      color            : var(--header-hover-font-color);
+      background-color : rgba(0, 0, 0, 0.4);
+    }
+  }
+
+  &&--success {
+    border-color     : rgba(34, 80, 25, 0.2);
+    background-color : rgba(34, 80, 25, 0.8);
+    color            : var(--header-font-color);
+
+    &:hover {
+      color            : var(--header-hover-font-color);
+      background-color : rgba(34, 80, 25, 0.6);
+    }
+  }
+
+  &&--warning {
+    border-color     : rgba(208, 104, 11, 0.2);
+    background-color : rgba(208, 104, 11, 0.8);
+    color            : var(--header-font-color);
+
+    &:hover {
+      color            : var(--header-hover-font-color);
+      background-color : rgba(208, 104, 11, 0.6);
+    }
+  }
+
+  &&--danger {
+    border-color     : rgba(140, 30, 0, 0.2);
+    background-color : rgba(140, 30, 0, 0.8);
+    color            : var(--header-font-color);
+
+    &:hover {
+      color            : var(--header-hover-font-color);
+      background-color : rgba(140, 30, 0, 0.6);
+    }
+  }
+}
+
+
+.el-dialog {
+  background-color : rgba(33, 44, 61, 0.96);
+
+  .el-dialog__close {
+    color : var(--header-font-color);
+
+    &:hover {
+      color : var(--header-hover-font-color);
+    }
+  }
+
+  .el-dialog__title {
+    color     : var(--header-font-color);
+    font-size : 14px;
+  }
+}
+
+.el-input input,
+.el-textarea textarea {
+  background-color : rgba(0, 0, 0, 0.2);
+  border-color     : rgba(0, 0, 0, 0.2);
+
+  &:focus {
+    border-color : rgba(0, 0, 0, 0.3);
+    box-shadow   : 0 0 2px rgba(0, 0, 0, 0.4);
+  }
+
+  &:hover {
+    border-color : rgba(0, 0, 0, 0.3);
+  }
+
+
+}
+
+.el-input input {
+  &::placeholder {
+    color          : var(--header-font-color);
+    letter-spacing : 2px;
+    font-weight    : 100;
+  }
+}
+
+.el-textarea textarea {
+  &::placeholder {
+    color          : #6F87AA;
+    letter-spacing : 2px;
   }
 }
 

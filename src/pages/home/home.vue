@@ -21,7 +21,41 @@
       </el-button-group>
     </el-header>
     <el-main>
-      <router-view></router-view>
+      <el-container class="rabbit__home-edit">
+        <el-header height="40px">
+          <el-col
+            class="header__title"
+            :span="16">
+            <i class="el-icon-document"></i>
+            <h3>111</h3>
+          </el-col>
+          <el-col :span="8">
+            <el-button
+              size="mini"
+              type="danger"
+              icon="el-icon-delete">
+              {{$t('remove')}}
+            </el-button>
+            <el-button
+              size="mini"
+              type="primary"
+              icon="el-icon-upload">
+              {{$t('publish')}}
+            </el-button>
+          </el-col>
+        </el-header>
+        <el-container>
+          <el-aside width="200px">
+            <header></header>
+            <ul>
+              <li></li>
+            </ul>
+          </el-aside>
+          <el-main>
+            <router-view></router-view>
+          </el-main>
+        </el-container>
+      </el-container>
     </el-main>
     <el-footer height="32px">
     </el-footer>
@@ -48,7 +82,10 @@
     color : var(--header-font-color);
 
     > .el-main {
-      > .el-container {
+      >.rabbit__home-edit.el-container {
+        width         : 100%;
+        height        : 100%;
+        border-radius : 4px;
 
         .el-header,
         .el-aside,
@@ -65,6 +102,7 @@
 
           .header__title {
             display : flex;
+
             > i {
               margin-right : 6px;
             }
@@ -76,27 +114,12 @@
 
           .el-button {
             letter-spacing   : 2px;
-            border-color     : rgba(0, 0, 0, 0.1);
-            background-color : rgba(0, 0, 0, 0.4);
-            color            : var(--header-font-color);
-
-            &:hover {
-              color            : var(--header-hover-font-color);
-              background-color : rgba(0, 0, 0, 0.2);
-            }
           }
         }
 
         .el-aside {
           margin-right : 16px;
         }
-      }
-
-
-      > section {
-        width         : 100%;
-        height        : 100%;
-        border-radius : 4px;
       }
     }
   }

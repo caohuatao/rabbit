@@ -27,7 +27,8 @@
         <i class="el-icon-document"></i>
         <h3>{{$t('no-task')}}</h3>
         <el-button
-          @click="setting"
+          @click="newTask"
+          type="primary"
           icon="el-icon-plus">
           {{$t('add-task')}}
         </el-button>
@@ -44,10 +45,58 @@
           </el-button>
         </li>
       </ul>
+
+      <el-dialog
+        class="add-dialog"
+        width="260px"
+        title="新增任务"
+        :modal-append-to-body="false"
+        :visible.sync="newTaskConf.visible">
+        <el-form
+          :model="formData"
+          :rules="rules">
+          <el-form-item
+            size="small"
+            prop="title"
+            label="">
+            <el-input
+              maxlength="36"
+              v-model="formData.title"
+              placeholder="请输入标题">
+            </el-input>
+          </el-form-item>
+          <br>
+          <el-form-item
+            size="small"
+            prop="desc"
+            label="">
+            <el-input
+              maxlength="200"
+              type="textarea"
+              rows="3"
+              resize="none"
+              v-model="formData.desc"
+              placeholder="请输入描述">
+            </el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer">
+          <el-button
+            size="mini"
+            type="danger">
+            取 消
+          </el-button>
+          <el-button
+            size="mini"
+            type="success">
+            确 认
+          </el-button>
+        </span>
+      </el-dialog>
     </el-main>
     <el-footer height="32px">
       <el-button
-        @click="setting"
+        @click="newTask"
         class="setting-btn"
         type="text"
         icon="el-icon-plus">
@@ -91,7 +140,29 @@
             value: 'en'
           }
         ],
-        taskList: []
+        taskList: [],
+        formData: {
+          title: '',
+          desc: ''
+        },
+        rules: {
+          title: [
+            {
+              required: true,
+              message: '请输入标题',
+              trigger: 'blur'
+            }
+          ]
+        },
+        newTaskConf: {
+          visible: false,
+          open: () => {
+            this.newTaskConf.visible = true
+          },
+          cancel: () => {
+
+          }
+        }
       }
     },
     created() {
@@ -111,11 +182,13 @@
       }
     },
     methods: {
-      setting() {
-        ipcRenderer.send('router', {
-          id: 'home',
-          params: ''
-        })
+      newTask() {
+        this.newTaskConf.visible = true
+
+        // ipcRenderer.send('router', {
+        //   id: 'home',
+        //   params: '#/'
+        // })
       },
       minus() {
         win.minimize()
@@ -128,7 +201,7 @@
         this.tasks.remove(item.taskId)
       },
       gotoGithub() {
-       shell.openExternal("https://github.com/caohuatao/rabbit")
+        shell.openExternal('https://github.com/caohuatao/rabbit')
       }
     }
   }
@@ -181,14 +254,6 @@
 
         .el-button {
           width            : 200px;
-          border-color     : rgba(0, 0, 0, 0.2);
-          background-color : rgba(0, 0, 0, 0.6);
-          color            : var(--header-font-color);
-
-          &:hover {
-            color            : var(--header-hover-font-color);
-            background-color : rgba(0, 0, 0, 0.4);
-          }
         }
 
         .el-icon-document {
@@ -199,6 +264,16 @@
         h3 {
           font-size     : 14px;
           margin-bottom : 60px;
+        }
+      }
+
+      .add-dialog {
+
+        .el-dialog__body {
+          padding : 12px 20px 0;
+        }
+
+        .el-dialog__footer {
         }
       }
     }
@@ -250,5 +325,6 @@
         }
       }
     }
+
   }
 </style>
