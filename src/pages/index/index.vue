@@ -62,7 +62,7 @@
             <el-input
               maxlength="36"
               v-model="formData.title"
-              placeholder="请输入标题">
+              placeholder="任务主题">
             </el-input>
           </el-form-item>
           <br>
@@ -71,12 +71,9 @@
             prop="desc"
             label="">
             <el-input
-              maxlength="200"
-              type="textarea"
-              rows="3"
-              resize="none"
+              maxlength="50"
               v-model="formData.desc"
-              placeholder="请输入描述">
+              placeholder="备注">
             </el-input>
           </el-form-item>
         </el-form>
